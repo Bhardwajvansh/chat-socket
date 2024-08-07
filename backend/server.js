@@ -8,6 +8,8 @@ app.get("/",(req,res)=>{
     res.send("yo!")
 })
 
+app.use(express.json());
+
 app.use("/api/auth", authRoutes)
 
 const start = ()=>{
