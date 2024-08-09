@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const bcrypt = require('bcryptjs');
 
 const signup = async (req,res) => {
     try {
@@ -13,13 +14,16 @@ const signup = async (req,res) => {
             return res.status(400).json({error:"username already exists!"})
         }
 
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
         const boyPfp = `https://avatar.iran.liara.run/public/boy`
         const girlPfp = `https://avatar.iran.liara.run/public/girl`
 
         const newUser = new User({
             fullName,
             username,
-            password,
+            password: hashedPassword,
             gender,
             profilePic: gender === 'male' ? boyPfp : girlPfp,
         })
